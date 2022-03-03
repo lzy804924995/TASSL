@@ -53,6 +53,10 @@ done
 [ "$SYSTEM" ] || SYSTEM=`(uname -s) 2>/dev/null`  || SYSTEM="unknown"
 [ "$BUILD" ] || VERSION=`(uname -v) 2>/dev/null` || VERSION="unknown"
 
+echo "MACHINE ===> ${MACHINE}"
+echo "RELEASE ===> ${RELEASE}"
+echo "SYSTEM ===> ${SYSTEM}"
+echo "VERSION ===> ${VERSION}"
 
 # Now test for ISC and SCO, since it is has a braindamaged uname.
 #
@@ -273,17 +277,8 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 	;;
 
     Darwin:*)
-	case "$MACHINE" in
-	    Power*)
-		echo "ppc-apple-darwin${VERSION}"
-		;;
-	    *)
-		echo "i686-apple-darwin${VERSION}"
-		;;
-	esac
-	exit 0
+		echo "${MACHINE}-apple-darwin"; exit 0
 	;;
-
     SunOS:5.*)
 	echo "${MACHINE}-whatever-solaris2"; exit 0
 	;;
@@ -545,6 +540,7 @@ case "$GUESSOS" in
 	OUT="irix-mips3-$CC"
 	;;
   ppc-apple-rhapsody) OUT="rhapsody-ppc-cc" ;;
+  ${MACHINE}-apple-darwin*) OUT="darwin64-$MACHINE-cc" ;;
   ppc-apple-darwin*)
 	ISA64=`(sysctl -n hw.optional.64bitops) 2>/dev/null`
 	if [ "$ISA64" = "1" -a -z "$KERNEL_BITS" ]; then
