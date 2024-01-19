@@ -292,6 +292,9 @@ extern "C" {
 
 # define TLS1_FLAGS_STATELESS                    0x0800
 
+/* Set if extended master secret extension required on renegotiation */
+# define TLS1_FLAGS_REQUIRED_EXTMS               0x1000
+
 # define SSL3_MT_HELLO_REQUEST                   0
 # define SSL3_MT_CLIENT_HELLO                    1
 # define SSL3_MT_SERVER_HELLO                    2
@@ -309,6 +312,7 @@ extern "C" {
 # define SSL3_MT_CERTIFICATE_STATUS              22
 # define SSL3_MT_SUPPLEMENTAL_DATA               23
 # define SSL3_MT_KEY_UPDATE                      24
+# define SSL3_MT_COMPRESSED_CERTIFICATE          25
 # ifndef OPENSSL_NO_NEXTPROTONEG
 #  define SSL3_MT_NEXT_PROTO                     67
 # endif

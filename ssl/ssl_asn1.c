@@ -269,7 +269,7 @@ SSL_SESSION *d2i_SSL_SESSION(SSL_SESSION **a, const unsigned char **pp,
 #ifndef OPENSSL_NO_CNSM
         && (as->ssl_version >> 8) != SM1_1_VERSION_MAJOR    //add by gujq on 20190822 v0.6
 #endif
-		) {
+        ) {
         SSLerr(SSL_F_D2I_SSL_SESSION, SSL_R_UNSUPPORTED_SSL_VERSION);
         goto err;
     }

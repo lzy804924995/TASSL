@@ -34,11 +34,10 @@ static int ssl_cipher_list_to_bytes(SSL *s, STACK_OF(SSL_CIPHER) *sk,
                                     WPACKET *pkt);
 
 #ifndef OPENSSL_NO_CNSM
-
 int ssl_derive_SM2(SSL *s, EVP_PKEY *privkey, EVP_PKEY *pubkey,  int gensecret);
 uint16_t tls1_nid2group_id(int nid);
-
 #endif
+
 /*
  * Is a CertificateRequest message allowed at the moment or not?
  *
@@ -72,11 +71,12 @@ static int key_exchange_expected(SSL *s)
      * Can't skip server key exchange if this is an ephemeral
      * ciphersuite or for SRP
      */
-    #ifndef OPENSSL_NO_CNSM
-	    if (alg_k & (SSL_kDHE | SSL_kECDHE | SSL_kDHEPSK | SSL_kECDHEPSK | SSL_kECC |SSL_kSM2DH  //add SSL_kECC  SSL_kSM2DH need ske
-    #else
-        if (alg_k & (SSL_kDHE | SSL_kECDHE | SSL_kDHEPSK | SSL_kECDHEPSK
-    #endif
+#ifndef OPENSSL_NO_CNSM
+    //add SSL_kECC  SSL_kSM2DH need ske
+    if (alg_k & (SSL_kDHE | SSL_kECDHE | SSL_kDHEPSK | SSL_kECDHEPSK | SSL_kECC |SSL_kSM2DH
+#else
+    if (alg_k & (SSL_kDHE | SSL_kECDHE | SSL_kDHEPSK | SSL_kECDHEPSK
+#endif
                  | SSL_kSRP)) {
         return 1;
     }
@@ -2222,7 +2222,7 @@ static int tls_process_ske_ecdhe(SSL *s, PACKET *pkt, EVP_PKEY **pkey)
     }
     //At present, because there is no definite explanation, when the protocol is CNTLS, the default 249 will be used as sm2 curve ID
     if( s->version == SM1_1_VERSION && curve_id != 249)
-	    curve_id = 249;    //if none curve id ,set it to sm2 249 defined by tass
+        curve_id = 249;    //if none curve id ,set it to sm2 249 defined by tass
     /*
      * Check curve is named curve type and one of our preferences, if not
      * server has sent an invalid curve.
@@ -2283,17 +2283,16 @@ MSG_PROCESS_RETURN tls_process_key_exchange(SSL *s, PACKET *pkt)
     EVP_MD_CTX *md_ctx = NULL;
     EVP_PKEY_CTX *pctx = NULL;
     PACKET save_param_start, signature;
-    #ifndef OPENSSL_NO_CNSM
+#ifndef OPENSSL_NO_CNSM
     BUF_MEM *sm2_certs = NULL;
     long alg_a = 0;
     size_t sm2_certs_len = 0;
-    EVP_PKEY_CTX *engine_pctx = NULL;
-    #endif
- 
+#endif
+
     alg_k = s->s3->tmp.new_cipher->algorithm_mkey;
-    #ifndef OPENSSL_NO_CNSM
+#ifndef OPENSSL_NO_CNSM
     alg_a = s->s3->tmp.new_cipher->algorithm_auth;
-    #endif
+#endif
 
     save_param_start = *pkt;
 
@@ -2321,25 +2320,22 @@ MSG_PROCESS_RETURN tls_process_key_exchange(SSL *s, PACKET *pkt)
             /* SSLfatal() already called */
             goto err;
         }
-    #ifndef OPENSSL_NO_CNSM
-        } else if (alg_k & (SSL_kECDHE | SSL_kECDHEPSK |SSL_kSM2DH)) {  //add SSL_kSM2DH for ECDHE-SM4-SM3 ciphersuit by tass gujq on 20181126
-    #else
-        } else if (alg_k & (SSL_kECDHE | SSL_kECDHEPSK)) {
-    #endif
+#ifndef OPENSSL_NO_CNSM
+    //add SSL_kSM2DH for ECDHE-SM4-SM3 ciphersuit by tass gujq on 20181126
+    } else if (alg_k & (SSL_kECDHE | SSL_kECDHEPSK |SSL_kSM2DH)) {
+#else
+    } else if (alg_k & (SSL_kECDHE | SSL_kECDHEPSK)) {
+#endif
         if (!tls_process_ske_ecdhe(s, pkt, &pkey)) {
             /* SSLfatal() already called */
             goto err;
         }
-#ifndef OPENSSL_NO_CNSM	
+#ifndef OPENSSL_NO_CNSM
     } else if (alg_k & SSL_kECC) {
-    	alg_a = s->s3->tmp.new_cipher->algorithm_auth;
-        if (alg_a & SSL_aSM2DSA){
+        alg_a = s->s3->tmp.new_cipher->algorithm_auth;
+        if (alg_a & SSL_aSM2DSA) {
             pkey = X509_get_pubkey((sk_X509_value(s->session->peer_chain,0)));
-            engine_pctx = EVP_PKEY_CTX_new_pkey_id(pkey, NID_sm2, NULL);
-            EVP_PKEY_verify_init(engine_pctx);
-          }
-	     
-        else {
+        } else {
             SSLerr(SSL_F_TLS_PROCESS_KEY_EXCHANGE, ERR_R_INTERNAL_ERROR);
             goto err;
         }
@@ -2347,13 +2343,13 @@ MSG_PROCESS_RETURN tls_process_key_exchange(SSL *s, PACKET *pkt)
         if (!sm2_certs)
             goto err;
         sm2_certs_len = 0;
-        
-        /*从链表最后开始，查找第一个数据加密功能的证书,作为加密证书使用，跟排列顺序无关*/
-        for(i=sk_X509_num(s->session->peer_chain)-1; i>=0; i--){
-            if((X509_get_extension_flags(sk_X509_value(s->session->peer_chain, i)) & EXFLAG_KUSAGE) && (X509_get_key_usage(sk_X509_value(s->session->peer_chain, i)) & X509v3_KU_DATA_ENCIPHERMENT))
+
+        for(i=sk_X509_num(s->session->peer_chain)-1; i>=0; i--) {
+            if((X509_get_extension_flags(sk_X509_value(s->session->peer_chain, i)) & EXFLAG_KUSAGE) &&
+               (X509_get_key_usage(sk_X509_value(s->session->peer_chain, i)) & X509v3_KU_DATA_ENCIPHERMENT))
                 break;
         }
-        
+
         if (!ssl_add_cert_to_buf(sm2_certs, &sm2_certs_len, sk_X509_value(s->session->peer_chain, i)))
             goto err;
 #endif
@@ -2457,30 +2453,22 @@ MSG_PROCESS_RETURN tls_process_key_exchange(SSL *s, PACKET *pkt)
                 goto err;
             }
         }
-        
-        #ifndef OPENSSL_NO_CNSM
-		    if(s->s3->tmp.new_cipher->id == TLS1_CK_ECC_WITH_SM4_SM3){
-        	    tbslen = construct_key_exchange_tbs(s, &tbs, sm2_certs ? sm2_certs->data : NULL,
+#ifndef OPENSSL_NO_CNSM
+        if(s->s3->tmp.new_cipher->id == TLS1_CK_ECC_WITH_SM4_SM3) {
+            tbslen = construct_key_exchange_tbs(s, &tbs, sm2_certs ? sm2_certs->data : NULL,
                                             sm2_certs_len);
-            }
-            else{
-        	    tbslen = construct_key_exchange_tbs(s, &tbs, PACKET_data(&params),
+        } else {
+            tbslen = construct_key_exchange_tbs(s, &tbs, PACKET_data(&params),
                                             PACKET_remaining(&params));
-            }
-        #else
+        }
+#else
         tbslen = construct_key_exchange_tbs(s, &tbs, PACKET_data(&params),
                                             PACKET_remaining(&params));
-        #endif
-        
+#endif
         if (tbslen == 0) {
             /* SSLfatal() already called */
             goto err;
         }
-#ifndef OPENSSL_NO_CNSM
-        if(engine_pctx){
-            EVP_MD_CTX_set_pkey_ctx(md_ctx, engine_pctx);
-        }
-#endif
 
         rv = EVP_DigestVerify(md_ctx, PACKET_data(&signature),
                               PACKET_remaining(&signature), tbs, tbslen);
@@ -2491,14 +2479,12 @@ MSG_PROCESS_RETURN tls_process_key_exchange(SSL *s, PACKET *pkt)
             goto err;
         }
 #ifndef OPENSSL_NO_CNSM
-        if(alg_k & SSL_kECC){
+        if(alg_k & SSL_kECC) {
             if(sm2_certs)
                 BUF_MEM_free(sm2_certs);
             if(pkey)
                 EVP_PKEY_free(pkey);
-            if(engine_pctx)
-                EVP_PKEY_CTX_free(engine_pctx);
-    	}
+        }
 #endif
         EVP_MD_CTX_free(md_ctx);
         md_ctx = NULL;
@@ -2525,13 +2511,11 @@ MSG_PROCESS_RETURN tls_process_key_exchange(SSL *s, PACKET *pkt)
     return MSG_PROCESS_CONTINUE_READING;
  err:
 #ifndef OPENSSL_NO_CNSM
-    if(alg_k & SSL_kECC){
+    if(alg_k & SSL_kECC) {
         if(sm2_certs)
             BUF_MEM_free(sm2_certs);
         if(pkey)
             EVP_PKEY_free(pkey);
-        if(engine_pctx)
-        	EVP_PKEY_CTX_free(engine_pctx);
     }
 #endif
     EVP_MD_CTX_free(md_ctx);
@@ -3174,9 +3158,8 @@ static int tls_construct_cke_sm2ecc(SSL *s, WPACKET *pkt)
                  ERR_R_INTERNAL_ERROR);
         return 0;
     }
-    
-    /*从链表最后开始，查找第一个数据加密功能的证书,作为加密证书使用，跟排列顺序无关*/
-    for(i=sk_X509_num(s->session->peer_chain)-1; i>=0; i--){
+
+    for(i=sk_X509_num(s->session->peer_chain)-1; i>=0; i--) {
         if((X509_get_extension_flags(sk_X509_value(s->session->peer_chain, i)) & EXFLAG_KUSAGE) && (X509_get_key_usage(sk_X509_value(s->session->peer_chain, i)) & X509v3_KU_DATA_ENCIPHERMENT))
             break;
     }
@@ -3205,16 +3188,16 @@ static int tls_construct_cke_sm2ecc(SSL *s, WPACKET *pkt)
         goto err;
     }
 
-		#ifdef CIPHER_DEBUG
+#ifdef CIPHER_DEBUG
     {
-    	int gi = 0;
-    	printf("client --->the pre mask key =[");
-    	for(gi=0; gi<pmslen; gi++){
-    		printf("%02X", pms[gi]);
-    	}
-    	printf("]\n");
+        int gi = 0;
+        printf("client --->the pre mask key =[");
+        for(gi=0; gi<pmslen; gi++) {
+            printf("%02X", pms[gi]);
+        }
+        printf("]\n");
     }
-    #endif
+#endif
     
     /* Fix buf for TLS and beyond */
     if ((s->version > SSL3_VERSION|| s->version == SM1_1_VERSION) && !WPACKET_start_sub_packet_u16(pkt)) {
@@ -3229,23 +3212,24 @@ static int tls_construct_cke_sm2ecc(SSL *s, WPACKET *pkt)
                  ERR_R_EVP_LIB);
         goto err;
     }
-    
-   /*	
+
+    /*
     if (!WPACKET_allocate_bytes(pkt, enclen, &encdata)
             || EVP_PKEY_encrypt(pctx, encdata, &enclen, pms, pmslen) <= 0) {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CKE_SM2ECC,
                  SSL_R_BAD_RSA_ENCRYPT);
         goto err;
-    }*/
+    }
+    */
     if (!WPACKET_reserve_bytes(pkt, enclen, &encdata)
             || EVP_PKEY_encrypt(pctx, encdata, &enclen, pms, pmslen) <= 0) {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CKE_SM2ECC,
                  SSL_R_BAD_RSA_ENCRYPT);
         goto err;
     }
-    pkt->written += enclen;   //签名时分配的字节数为最大的022100，所以真正签名完成时要设置真实数值，因为有的服务端不认后面带00的加密密文
+    pkt->written += enclen;
     pkt->curr += enclen;
-    
+
     EVP_PKEY_CTX_free(pctx);
     pctx = NULL;
 
@@ -3266,7 +3250,7 @@ static int tls_construct_cke_sm2ecc(SSL *s, WPACKET *pkt)
     s->s3->tmp.pmslen = pmslen;
 
     return 1;
- err:
+err:
     OPENSSL_clear_free(pms, pmslen);
     EVP_PKEY_CTX_free(pctx);
     return 0;
@@ -3279,7 +3263,7 @@ static int tls_construct_cke_sm2dh(SSL *s, WPACKET *pkt)
     EVP_PKEY *ckey = NULL, *skey = NULL;
     int ret = 0;
     uint16_t curve_id = 0;
-    ENGINE *e_tmp = NULL;
+    //ENGINE *e_tmp = NULL;
     EVP_PKEY_CTX *pctx = NULL;
 
     skey = s->s3->peer_tmp;
@@ -3288,29 +3272,29 @@ static int tls_construct_cke_sm2dh(SSL *s, WPACKET *pkt)
                  ERR_R_INTERNAL_ERROR);
         return 0;
     }
-    /*签名私钥使用引擎时，使用引擎产生临时秘钥对*/
-    if(s->cert->pkeys[SSL_PKEY_ECC].privatekey)
-        e_tmp = EVP_PKEY_pmeth_engine(s->cert->pkeys[SSL_PKEY_ECC].privatekey);
-    else{
+
+    if(s->cert->pkeys[SSL_PKEY_ECC].privatekey) {
+//        e_tmp = EVP_PKEY_pmeth_engine(s->cert->pkeys[SSL_PKEY_ECC].privatekey);
+    }else{
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CKE_SM2DH,
                  ERR_R_INTERNAL_ERROR);
         goto err;
     }
-    
+
     ckey = EVP_PKEY_new();
-    pctx = EVP_PKEY_CTX_new_id(EVP_PKEY_SM2, e_tmp);  
-    
+    pctx = EVP_PKEY_CTX_new_id(EVP_PKEY_SM2, NULL);
+
     EVP_PKEY_keygen_init(pctx);
     EVP_PKEY_CTX_set_sm2_paramgen_curve_nid(pctx, NID_sm2);
     EVP_PKEY_CTX_set_ec_param_enc(pctx, OPENSSL_EC_NAMED_CURVE);
-    
+
     if(!EVP_PKEY_keygen(pctx, &ckey))
     {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CKE_SM2DH,
                  ERR_R_INTERNAL_ERROR);
         goto err;
     }
-	
+
     if (ssl_derive_SM2(s, ckey, skey, 0) == 0) {
         /* SSLfatal() already called */
         goto err;
@@ -3324,25 +3308,23 @@ static int tls_construct_cke_sm2dh(SSL *s, WPACKET *pkt)
                  ERR_R_EC_LIB);
         goto err;
     }
-    
-    /* 国密局检测用的是00，有的厂商用的也是00，所以默认用00 */
+
 #ifdef STD_CURVE_ID
     curve_id = tls1_nid2group_id(NID_sm2);
 #else
     curve_id = 0;
 #endif
-    if	(!WPACKET_put_bytes_u8(pkt, NAMED_CURVE_TYPE)
+    if (!WPACKET_put_bytes_u8(pkt, NAMED_CURVE_TYPE)
                 || !WPACKET_put_bytes_u8(pkt, 0)
                 || !WPACKET_put_bytes_u8(pkt, curve_id)
-                || !WPACKET_sub_memcpy_u8(pkt, encodedPoint, encoded_pt_len)){
-	SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CKE_SM2DH,
+                || !WPACKET_sub_memcpy_u8(pkt, encodedPoint, encoded_pt_len)) {
+        SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CKE_SM2DH,
                  ERR_R_INTERNAL_ERROR);
         goto err;
-
     }
 
     ret = 1;
- err:
+err:
     OPENSSL_free(encodedPoint);
     EVP_PKEY_free(ckey);
     return ret;
@@ -3628,14 +3610,14 @@ int tls_construct_client_key_exchange(SSL *s, WPACKET *pkt)
     } else if (alg_k & (SSL_kDHE | SSL_kDHEPSK)) {
         if (!tls_construct_cke_dhe(s, pkt))
             goto err;
-    #ifndef OPENSSL_NO_CNSM
-    }else if (alg_k & SSL_kECC) {
+#ifndef OPENSSL_NO_CNSM
+    } else if (alg_k & SSL_kECC) {
         if (!tls_construct_cke_sm2ecc(s, pkt))
             goto err;
-     }else if (alg_k & SSL_kSM2DH) {
+    } else if (alg_k & SSL_kSM2DH) {
         if (!tls_construct_cke_sm2dh(s, pkt))
             goto err;
-    #endif
+#endif
     } else if (alg_k & (SSL_kECDHE | SSL_kECDHEPSK)) {
         if (!tls_construct_cke_ecdhe(s, pkt))
             goto err;
@@ -3666,11 +3648,6 @@ int tls_client_key_exchange_post_work(SSL *s)
 {
     unsigned char *pms = NULL;
     size_t pmslen = 0;
-#ifndef OPENSSL_NO_CNSM
-    ENGINE *local_e_sm2 = NULL;
-    ENGINE *local_e_sm4 = NULL;
-    EVP_PKEY * local_evp_ptr = NULL;
-#endif
 
     pms = s->s3->tmp.pms;
     pmslen = s->s3->tmp.pmslen;
@@ -3691,25 +3668,6 @@ int tls_client_key_exchange_post_work(SSL *s)
                  SSL_F_TLS_CLIENT_KEY_EXCHANGE_POST_WORK, ERR_R_MALLOC_FAILURE);
         goto err;
     }
-#ifndef OPENSSL_NO_CNSM
-    //如果此ssl的私钥加载了sm4引擎，则使用引擎进行masterkey计算  
-    local_evp_ptr = s->cert->pkeys[SSL_PKEY_ECC_ENC].privatekey;
-    if(local_evp_ptr)
-        local_e_sm2 = EVP_PKEY_pmeth_engine(local_evp_ptr);
-    local_e_sm4 = ENGINE_get_cipher_engine(NID_sm4_cbc); 
-    if(local_evp_ptr && local_e_sm4){
-        if(s->s3 && s->s3->tmp.new_cipher && s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3){      //ECDHE-SM4-SM2套件并且加载了SM2引擎，则使用密文premasterkey作为输入
-            if(local_e_sm2)
-                ENGINE_set_tass_flags(local_e_sm4, TASS_FLAG_PRE_MASTER_KEY_CIPHER);
-        }
-        if(!ENGINE_ssl_generate_master_secret(local_e_sm4, s, pms, pmslen, 1)){
-            pmslen = 0;
-            goto err;
-        }
-        ENGINE_finish(local_e_sm4);
-    }
-    else 
-#endif
     if (!ssl_generate_master_secret(s, pms, pmslen, 1)) {
         /* SSLfatal() already called */
         /* ssl_generate_master_secret frees the pms even on error */
@@ -3754,10 +3712,6 @@ int tls_client_key_exchange_post_work(SSL *s)
 
     return 1;
  err:
-#ifndef OPENSSL_NO_CSNM
-    if(local_e_sm4)
-        ENGINE_finish(local_e_sm4);
-#endif
     OPENSSL_clear_free(pms, pmslen);
     s->s3->tmp.pms = NULL;
     return 0;
@@ -3882,27 +3836,25 @@ int tls_construct_client_certificate(SSL *s, WPACKET *pkt)
             return 0;
         }
     }
-    #ifndef OPENSSL_NO_CNSM
-     if (s->s3->tmp.new_cipher->algorithm_mkey & (SSL_kECC | SSL_kSM2DH))
-     {
-         if (!ssl3_output_sm2_cert_chain(s, pkt, (s->s3->tmp.cert_req == 2) ? NULL : s->cert->key, &s->cert->pkeys[SSL_PKEY_ECC_ENC]))
-         {
-             return 0;
-         }
-     }
-     else{
-    #endif   
-       
-        
-	    if (!ssl3_output_cert_chain(s, pkt,
-	                                (s->s3->tmp.cert_req == 2) ? NULL
-	                                                           : s->cert->key)) {
-	        /* SSLfatal() already called */
-	        return 0;
-	    }
-    #ifndef OPENSSL_NO_CNSM
-  	}
-    #endif
+#ifndef OPENSSL_NO_CNSM
+    if (s->s3->tmp.new_cipher->algorithm_mkey & (SSL_kECC | SSL_kSM2DH))
+    {
+        if (!ssl3_output_sm2_cert_chain(s, pkt,
+                                    (s->s3->tmp.cert_req == 2) ? NULL
+                                                               : s->cert->key, &s->cert->pkeys[SSL_PKEY_ECC_ENC])) {
+            return 0;
+        }
+    } else {
+#endif
+        if (!ssl3_output_cert_chain(s, pkt,
+                                    (s->s3->tmp.cert_req == 2) ? NULL
+                                                               : s->cert->key)) {
+            /* SSLfatal() already called */
+            return 0;
+        }
+#ifndef OPENSSL_NO_CNSM
+    }
+#endif
 
     if (SSL_IS_TLS13(s)
             && SSL_IS_FIRST_HANDSHAKE(s)
@@ -4133,10 +4085,10 @@ static int ssl_cipher_list_to_bytes(SSL *s, STACK_OF(SSL_CIPHER) *sk, WPACKET *p
                 if (c->max_tls >= s->s3->tmp.max_ver
                         && c->min_tls <= s->s3->tmp.max_ver)
                     maxverok = 1;
-                #ifndef OPENSSL_NO_CNSM
+#ifndef OPENSSL_NO_CNSM
                 if (s->version == SM1_1_VERSION)
                     maxverok = 1;
-                #endif
+#endif
             }
         }
 

@@ -20,9 +20,6 @@
 #include "internal/nelem.h"
 #include "ssl_locl.h"
 #include <openssl/ct.h>
-#ifndef OPENSSL_NO_CNSM
-#include <openssl/engine.h>
-#endif
 
 SSL3_ENC_METHOD const TLSv1_enc_data = {
     tls1_enc,
@@ -169,225 +166,225 @@ static const TLS_GROUP_INFO nid_list[] = {
     {NID_brainpoolP512r1, 256, TLS_CURVE_PRIME}, /* brainpool512r1 (28) */
     {EVP_PKEY_X25519, 128, TLS_CURVE_CUSTOM}, /* X25519 (29) */
     {EVP_PKEY_X448, 224, TLS_CURVE_CUSTOM}, /* X448 (30) */
-    #ifndef OPENSSL_NO_CNSM
+#ifndef OPENSSL_NO_CNSM
     {NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
-		{NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
+        {NID_undef, 80, TLS_CURVE_PRIME},
     {NID_sm2, 80, TLS_CURVE_PRIME}, /* sm2 (249) */  //add by tass gujq for sm2 curve
     #endif
 };
@@ -426,7 +423,7 @@ int set_sm2_group_id_custom(uint16_t value)
         return 1;
     }
 
-    return 0;	
+    return 0;
 }
 
 #endif
@@ -440,7 +437,7 @@ const TLS_GROUP_INFO *tls1_group_id_lookup(uint16_t group_id)
 {
 #ifndef OPENSSL_NO_CNSM
     if(SM2_group_id_custom != 249 && SM2_group_id_custom > 0){
-    	return &nid_list[248];
+        return &nid_list[248];
     }
 #endif
 
@@ -491,18 +488,18 @@ void tls1_get_supported_groups(SSL *s, const uint16_t **pgroups,
 
     default:
         if (s->ext.supportedgroups == NULL) {
-        #ifndef OPENSSL_NO_CNSM
-            if(s->s3 && s->s3->tmp.new_cipher && s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3){ //ECDHE-SM4-SM3 only allow sm2 curve, and other custom configed sm2 curve id    modify by gujq on 20190426
-	            *pgroups = eccurves_default_sm2;
+#ifndef OPENSSL_NO_CNSM
+            //ECDHE-SM4-SM3 only allow sm2 curve, and other custom configed sm2 curve id    modify by gujq on 20190426
+            if(s->s3 && s->s3->tmp.new_cipher && s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3){
+                *pgroups = eccurves_default_sm2;
                 *pgroupslen = sm2_curve_config_index+1;
-	     	}
-            else{ 
-        #endif		
+            } else {
+#endif
                 *pgroups = eccurves_default;
                 *pgroupslen = OSSL_NELEM(eccurves_default);
-        #ifndef OPENSSL_NO_CNSM
+#ifndef OPENSSL_NO_CNSM
             }
-        #endif
+#endif
         } else {
             *pgroups = s->ext.supportedgroups;
             *pgroupslen = s->ext.supportedgroups_len;
@@ -550,9 +547,9 @@ uint16_t tls1_shared_group(SSL *s, int nmatch)
     const uint16_t *pref, *supp;
     size_t num_pref, num_supp, i;
     int k;
-		#ifndef OPENSSL_NO_CNSM
-		int reserve_sm2_curve_id = 0;
-		#endif
+#ifndef OPENSSL_NO_CNSM
+    int reserve_sm2_curve_id = 0;
+#endif
 
     /* Can't do anything on client side */
     if (s->server == 0)
@@ -587,7 +584,6 @@ uint16_t tls1_shared_group(SSL *s, int nmatch)
         tls1_get_supported_groups(s, &supp, &num_supp);
     }
 
-
     for (k = 0, i = 0; i < num_pref; i++) {
         uint16_t id = pref[i];
 
@@ -595,34 +591,31 @@ uint16_t tls1_shared_group(SSL *s, int nmatch)
             || !tls_curve_allowed(s, id, SSL_SECOP_CURVE_SHARED))
                     continue;
 #ifndef OPENSSL_NO_CNSM
-            if(s->s3 && s->s3->tmp.new_cipher && s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3){ //ECDHE-SM4-SM3 prefer 249(define for sm2 curve id in tassl-1.1.1b by tass)  for sm2 curve id
-                if(id != 249){
-                    reserve_sm2_curve_id = id;
-		      continue;
-                }
-		  else{
-                    return id;
-		  }
-
+        //ECDHE-SM4-SM3 prefer 249(define for sm2 curve id in tassl-1.1.1b by tass)  for sm2 curve id
+        if(s->s3 && s->s3->tmp.new_cipher && s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3) {
+            if(id != 249){
+                reserve_sm2_curve_id = id;
+                continue;
+            } else {
+                return id;
             }
+        }
 #endif
-
         if (nmatch == k)
             return id;
          k++;
     }
-
 #ifndef OPENSSL_NO_CNSM
     if(reserve_sm2_curve_id > 0)   //found one match curve id for TLS1_CK_ECDHE_WITH_SM4_SM3, but not 249
         return reserve_sm2_curve_id;
 #endif
 
 #ifndef OPENSSL_NO_CNSM
-    if(num_pref == 0 && s->s3 && s->s3->tmp.new_cipher && s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3){     //有时检测客户端根本不发送支持的曲线标识，此时默认用249作为SM2曲线作为共享曲线
+    //有时检测客户端根本不发送支持的曲线标识，此时默认用249作为SM2曲线作为共享曲线
+    if(num_pref == 0 && s->s3 && s->s3->tmp.new_cipher && s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3) {
         return 249;
     }
 #endif
-
     if (nmatch == -1)
         return k;
     /* Out of range (nmatch > k). */
@@ -822,19 +815,17 @@ int tls1_check_group_id(SSL *s, uint16_t group_id, int check_own_groups)
      */
     if (groups_len == 0)
             return 1;
-	
 #ifndef OPENSSL_NO_CNSM
-    if(group_id == 249 && SM2_group_id_custom != 249 && SM2_group_id_custom > 0){
-	int i;
+    if(group_id == 249 && SM2_group_id_custom != 249 && SM2_group_id_custom > 0) {
+        int i;
         for(i=0; i< sm2_curve_config_index; i++){
-		group_id = eccurves_default_sm2[i+1];
-		if(tls1_in_list(group_id, groups, groups_len)) 
-			return 1;
+        group_id = eccurves_default_sm2[i+1];
+        if(tls1_in_list(group_id, groups, groups_len))
+            return 1;
         }
-	return 0;
+        return 0;
     }
 #endif
-
     return tls1_in_list(group_id, groups, groups_len);
 }
 
@@ -1178,8 +1169,7 @@ static int rsa_pss_check_min_key_size(const RSA *rsa, const SIGALG_LOOKUP *lu)
  */
 static const SIGALG_LOOKUP *tls1_get_legacy_sigalg(const SSL *s, int idx)
 {
-	
-	const SIGALG_LOOKUP *lu;
+    const SIGALG_LOOKUP *lu;
     if (idx == -1) {
         if (s->server) {
             size_t i;
@@ -1277,10 +1267,13 @@ size_t tls12_get_psigalgs(SSL *s, int sent, const uint16_t **psigs)
         return s->cert->conf_sigalgslen;
     } else {
 #ifndef OPENSSL_NO_CNSM
-    if(!s->server && s->method != CNTLS_client_method()){    //when send clienthello extension as a client, but not use the CNTLS_client_method(), not include the rsa_sm3 and ecdsa_sm3 signature algorithm  by gujq on 20190821  V0.6
-		*psigs = tls12_sigalgs+2;
-	        return OSSL_NELEM(tls12_sigalgs) -2;		
-    	}
+        /* when send clienthello extension as a client, but not use the CNTLS_client_method(),
+         * not include the rsa_sm3 and ecdsa_sm3 signature algorithm  by gujq on 20190821  V0.6
+         */
+        if(!s->server && s->method != CNTLS_client_method()) {
+            *psigs = tls12_sigalgs+2;
+            return OSSL_NELEM(tls12_sigalgs) -2;
+        }
 #endif
         *psigs = tls12_sigalgs;
         return OSSL_NELEM(tls12_sigalgs);
@@ -1524,7 +1517,7 @@ int ssl_cipher_disabled(SSL *s, const SSL_CIPHER *c, int op, int ecdhe)
 #ifndef OPENSSL_NO_CNSM
     if(!s->server && s->method != CNTLS_client_method() &&(c->id == 0x0300e013 || c->id == 0x0300e011)){  //when s->method !=CNTLS_client_method() as a client, we disable the ECC-SM4-SM3(0x0300e013) and ECDHE-SM4-SM3(0x0300e011) by gujq on 20190821 v0.6
         return 1;
-    	}
+        }
 #endif
 
     if (!SSL_IS_DTLS(s)) {
@@ -1999,8 +1992,8 @@ void ssl_set_sig_mask(uint32_t *pmask_a, SSL *s, int op)
             continue;
 
         clu = ssl_cert_lookup_by_idx(lu->sig_idx);
-	if (clu == NULL)
-		continue;
+    if (clu == NULL)
+        continue;
 
         /* If algorithm is disabled see if we can enable it */
         if ((clu->amask & disabled_mask) != 0
@@ -3043,13 +3036,7 @@ int tls_choose_sigalg(SSL *s, int fatalerrs)
                     if (lu->sig == EVP_PKEY_RSA_PSS) {
                         /* validate that key is large enough for the signature algorithm */
                         EVP_PKEY *pkey = s->cert->pkeys[sig_idx].privatekey;
-#ifndef OPENSSL_NO_CNSM
-												ENGINE *tmp_e = NULL;
-												tmp_e = EVP_PKEY_pmeth_engine(pkey);
-                        if(tmp_e != NULL && strcmp(ENGINE_get_id(tmp_e), "tasshsm_rsa") == 0){     //line 3043 tasshsm_rsa 引擎不支持pss模式，由于evsm封装比较麻烦，暂不支持
-                        	continue;
-                        }
-#endif
+
                         if (!rsa_pss_check_min_key_size(EVP_PKEY_get0(pkey), lu))
                             continue;
                     }

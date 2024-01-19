@@ -120,11 +120,11 @@ int tls_setup_handshake(SSL *s)
             } else if (ver_max >= c->min_tls && ver_max <= c->max_tls) {
                 ok = 1;
             }
-            #ifndef OPENSSL_NO_CNSM
-            else if(ver_max == SM1_1_VERSION){
+#ifndef OPENSSL_NO_CNSM
+            else if (ver_max == SM1_1_VERSION) {
             	ok = 1;
             }
-            #endif
+#endif
             if (ok)
                 break;
         }
@@ -261,11 +261,7 @@ int tls_construct_cert_verify(SSL *s, WPACKET *pkt)
         /* SSLfatal() already called */
         goto err;
     }
-    
-    #ifndef OPENSSL_NO_CNSM
-    
-    
-    
+#ifndef OPENSSL_NO_CNSM
     if(s->s3->tmp.new_cipher->id == TLS1_CK_ECC_WITH_SM4_SM3 || s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3 ){
         md_ctx = EVP_MD_CTX_new();
         EVP_DigestInit(md_ctx, EVP_sm3());
@@ -275,7 +271,7 @@ int tls_construct_cert_verify(SSL *s, WPACKET *pkt)
         	EVP_MD_CTX_free(md_ctx);
         hdata = cert_verify_md;
     }
-    #ifdef CIPHER_DEBUG
+#ifdef CIPHER_DEBUG
     {
     	int gi = 0;
     	printf("tls_construct_cert_verify tell: digest of hdata gi =[%ld]\n",hdatalen);
@@ -284,9 +280,8 @@ int tls_construct_cert_verify(SSL *s, WPACKET *pkt)
     	}
     	printf("\n\n");
     }
-    #endif
-    #endif
-        
+#endif
+#endif
 
     if (SSL_USE_SIGALGS(s) && !WPACKET_put_bytes_u16(pkt, lu->sigalg)) {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CERT_VERIFY,
@@ -332,7 +327,7 @@ int tls_construct_cert_verify(SSL *s, WPACKET *pkt)
                  ERR_R_EVP_LIB);
         goto err;
     }
-    #ifdef CIPHER_DEBUG
+#ifdef CIPHER_DEBUG
     {
     	int gi = 0;
     	printf("tls_construct_cert_verify tell: siglen =[%ld], sig =[\n", siglen);
@@ -341,7 +336,7 @@ int tls_construct_cert_verify(SSL *s, WPACKET *pkt)
     	}
     	printf("\n\n");
     }
-    #endif
+#endif
 
 #ifndef OPENSSL_NO_GOST
     {
@@ -384,7 +379,7 @@ MSG_PROCESS_RETURN tls_process_cert_verify(SSL *s, PACKET *pkt)
 #endif
 
 #ifndef OPENSSL_NO_CNSM
-		unsigned char cert_verify_md[32];
+    unsigned char cert_verify_md[32];
     EVP_MD_CTX *md_ctx;
 #endif
 
@@ -487,33 +482,27 @@ MSG_PROCESS_RETURN tls_process_cert_verify(SSL *s, PACKET *pkt)
         /* SSLfatal() already called */
         goto err;
     }
-    
-    #ifndef OPENSSL_NO_CNSM
-    
-    
-    
-    
-    
+
+#ifndef OPENSSL_NO_CNSM
     if(s->s3->tmp.new_cipher->id == TLS1_CK_ECC_WITH_SM4_SM3 || s->s3->tmp.new_cipher->id == TLS1_CK_ECDHE_WITH_SM4_SM3){
         md_ctx = EVP_MD_CTX_new();
         EVP_DigestInit(md_ctx, EVP_sm3());
         EVP_DigestUpdate(md_ctx, (const void *)hdata, hdatalen);
         EVP_DigestFinal(md_ctx, cert_verify_md, (unsigned int *)&hdatalen);
         if(md_ctx != NULL)
-        	EVP_MD_CTX_free(md_ctx);
+            EVP_MD_CTX_free(md_ctx);
         hdata = cert_verify_md;
     }
-    #ifdef CIPHER_DEBUG
+#ifdef CIPHER_DEBUG
     {
     	int gi = 0;
-    	printf("server?¡§oo digest of hdata gi =[%ld]\n",hdatalen);
     	for(gi=0; gi<hdatalen; gi++){
             printf("%02X", *(unsigned char *)(hdata+gi));
     	}
     	printf("\n\n");
     }
-    #endif
-    #endif
+#endif
+#endif
 
 #ifdef SSL_DEBUG
     fprintf(stderr, "Using client verify alg %s\n",
@@ -1636,7 +1625,6 @@ static const version_info tls_version_table[] = {
 #else
     {SSL3_VERSION, NULL, NULL},
 #endif
-
     {0, NULL, NULL},
 };
 
@@ -2269,10 +2257,9 @@ int ssl_get_min_max_version(const SSL *s, int *min_version, int *max_version,
         *real_max = 0;
     tmp_real_max = 0;
     for (vent = table; vent->version != 0; ++vent) {
-        #ifndef OPENSSL_NO_CNSM
+#ifndef OPENSSL_NO_CNSM
         if(vent->version == 0x0101) continue;  //SM1_1_VERSION not in 
-        #endif
-
+#endif
         /*
          * A table entry with a NULL client method is still a hole in the
          * "version capability" vector.

@@ -2284,7 +2284,7 @@ static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"magma-mac", "magma-mac", NID_magma_mac},
     {"hmacWithSHA512-224", "hmacWithSHA512-224", NID_hmacWithSHA512_224, 8, &so[7745]},
     {"hmacWithSHA512-256", "hmacWithSHA512-256", NID_hmacWithSHA512_256, 8, &so[7753]},
-    {"SM2-SM3", "sm3WithSM2Sign", NID_sm3WithSM2Sign, 8, &so[7761]},
+    {"SM2-SM3", "SM2-with-SM3", NID_sm3WithSM2Sign, 8, &so[7761]},
     {"sm-pkcs", "sm-pkcs", NID_sm_pkcs, 6, &so[7769]},
     {"sm-pkcs7", "china pkcs7 series", NID_sm_pkcs7, 9, &so[7775]},
     {"pkcs7_sm2_data", "pkcs7_sm2_data", NID_pkcs7_sm2_data, 10, &so[7784]},

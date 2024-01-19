@@ -560,7 +560,6 @@ size_t ec_key_simple_priv2oct(const EC_KEY *eckey,
     else if (len < buf_len)
         return 0;
 
-
     /* Octetstring may need leading zeros if BN is to short */
 
     if (BN_bn2binpad(eckey->priv_key, buf, buf_len) == -1) {

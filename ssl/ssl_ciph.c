@@ -83,10 +83,10 @@ static const ssl_cipher_table ssl_cipher_table_cipher[SSL_ENC_NUM_IDX] = {
     {SSL_CHACHA20POLY1305, NID_chacha20_poly1305}, /* SSL_ENC_CHACHA_IDX 19 */
     {SSL_ARIA128GCM, NID_aria_128_gcm}, /* SSL_ENC_ARIA128GCM_IDX 20 */
     {SSL_ARIA256GCM, NID_aria_256_gcm}, /* SSL_ENC_ARIA256GCM_IDX 21 */
-    #ifndef OPENSSL_NO_CNSM
+#ifndef OPENSSL_NO_CNSM
     {SSL_SM1, NID_sm4_ecb}, /* FIXME: no sm1 use sm4 ecb instead , SSL_ENC_SM1_IDX 22 */
     {SSL_SM4, NID_sm4_cbc}, /* sm4 cbc SSL_ENC_SM4_IDX 23 */
-    #endif
+#endif
 };
 
 static const EVP_CIPHER *ssl_cipher_methods[SSL_ENC_NUM_IDX];
@@ -122,9 +122,9 @@ static const ssl_cipher_table ssl_cipher_table_mac[SSL_MD_NUM_IDX] = {
     {0, NID_md5_sha1},          /* SSL_MD_MD5_SHA1_IDX 9 */
     {0, NID_sha224},            /* SSL_MD_SHA224_IDX 10 */
     {0, NID_sha512},             /* SSL_MD_SHA512_IDX 11 */
-    #ifndef OPNESSL_NO_CNSM
+#ifndef OPNESSL_NO_CNSM
     {SSL_SM3, NID_sm3}             /* SSL_MD_SHA512_IDX 11 */
-    #endif
+#endif
 };
 
 static const EVP_MD *ssl_digest_methods[SSL_MD_NUM_IDX] = {
@@ -184,7 +184,7 @@ static int ssl_mac_pkey_id[SSL_MD_NUM_IDX] = {
     /* SHA256, SHA384, GOST2012_256, MAC89-12 */
     EVP_PKEY_HMAC, EVP_PKEY_HMAC, EVP_PKEY_HMAC, NID_undef,
     /* GOST2012_512 */
-    #ifndef OPENSSL_NO_CNSM
+#ifndef OPENSSL_NO_CNSM
     EVP_PKEY_HMAC,
     /* md5_sha1 */
     EVP_PKEY_HMAC,
@@ -193,7 +193,7 @@ static int ssl_mac_pkey_id[SSL_MD_NUM_IDX] = {
     /* sha_512 */
     EVP_PKEY_HMAC,
     /* sm3 */
-    #endif
+#endif
     EVP_PKEY_HMAC,
 };
 
